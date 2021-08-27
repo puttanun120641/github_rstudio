@@ -1,0 +1,3 @@
+"0","titanic <- read.csv(file = '../data/train.csv')"
+"0",""
+"0",""

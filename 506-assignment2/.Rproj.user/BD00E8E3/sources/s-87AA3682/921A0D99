@@ -3,9 +3,9 @@
     "path": "C:/Users/ACER/Desktop/github_rstudio/506-assignment2/code/ass2.Rmd",
     "project_path": "code/ass2.Rmd",
     "type": "r_markdown",
-    "hash": "3753900668",
+    "hash": "0",
     "contents": "",
-    "dirty": false,
+    "dirty": true,
     "created": 1629994216793.0,
     "source_on_save": false,
     "relative_order": 1,
@@ -14,15 +14,15 @@
         "chunk_output_type": "inline",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "13,0",
-        "scrollLine": "2"
+        "cursorPosition": "16,18",
+        "scrollLine": "9"
     },
     "folds": "",
-    "lastKnownWriteTime": 1629994598,
+    "lastKnownWriteTime": 1630062879,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1629994598750,
+    "last_content_update": 1630078990549,
     "read_only": false,
     "read_only_alternatives": []
 }
