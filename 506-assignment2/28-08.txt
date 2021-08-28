@@ -1,0 +1,101 @@
+1.  Read titanic data
+titanic <- read.csv(file = '../data/train.csv')
+
+2.  Cleaning data
+
+#Installs package
+install.packages(“tidyverse”)
+ 
+#Load core tidyverse package
+library(tidyverse)
+
+
+#remove character column
+titanic <- select(titanic, -Cabin)
+titanic <- select(titanic, -Ticket)
+titanic <- select(titanic, -Name)
+
+##Assign NA to all blank entries
+titanic <- titanic %>% mutate_all(na_if,"")
+
+#Remove rows with NAs and store as titanic_cleaned
+titanic_cleaned <- na.omit(titanic)
+
+#take a look at titanic_cleaned
+View(titanic_cleaned)
+
+#recheck whether all NA are removed
+summary(titanic_cleaned)                 #No NA appear
+table(titanic_cleaned$Embarked)          #No NA appear
+
+3.  Analysing data
+3.1 Categorical data analysis
+#barplot for the percentage of Survival, Pclass, Sex and Embark, respectively. (the number of observation = 712)
+
+survivalpercent <- table(titanic_cleaned$Survived)/712
+barplot(survivalpercent, main="Survival", las=1, ylab="percentage", names.arg = c("Survive", "Not survive"))
+
+pclasspercent <- table(titanic_cleaned$Pclass)/712
+barplot(pclasspercent, main="Ticket class", las=1, ylab="percentage", names.arg = c("1st", "2nd", "3rd"))
+
+sexpercent <- table(titanic_cleaned$Sex)/712
+barplot(sexpercent  , main="Gender", las=1, ylab="percentage", names.arg = c("Male", "Female"))
+
+embarkpercent <- table(titanic_cleaned$Embarked)/712
+barplot(embarkpercent   , main="Port of Embarkation", las=1, ylab="percentage", names.arg = c("Cherbourg", "Queenstown", "Southampton"))
+
+3.2 Continuous data analysis
+#Age analysis ; median , sd and range
+summary(titanic_cleaned$Age)  # show median and range
+sd(titanic_cleaned$Age)       # show sd
+
+#Agegroup divide into <20, 20-40, 40-60 and >60
+Agegroup <- cut(titanic_cleaned$Age, breaks = c(0,20,40,60,100), labels = c("<20","20-40","40-60",">60"), right = FALSE)
+#rechek age group
+titanic_cleaned$Age[1:8]  #show 22 38 26 35 35 54  2 27
+Agegroup [1:8]            #show 20-40 20-40 20-40 20-40 20-40 40-60 <20   20-40
+#Barplot Agegroup
+table(Agegroup)/712
+agegrppercent <- table(Agegroup)/712
+barplot(agegrppercent, main = "Agegroup", las=1, ylab="percentage")
+
+# Analysis of the number of siblings/spouses aboard the Titanic ; median and range but no sd
+summary(titanic_cleaned$SibSp)
+
+#Analysis of the number of parents/children aboard the Titanic  ; median and range but no sd
+summary(titanic_cleaned$Parch)
+
+4. investigate potential predictors of survival
+4.1 Using boxplot to show trend between survival and continuous data including age, the number of siblings/spouses aboard the Titanic and the number of parents/children aboard the Titanic
+# survival vs age ; show in boxplot
+boxplot(titanic_cleaned$Age~titanic_cleaned$Survived, ylab="Age",main="Survival vs Age", xlab="Survival", las=1, names=c("Not survive", "Survive"), col=c("red", "green"))
+
+
+# survival vs the number of siblings/spouses aboard the Titanic
+boxplot(titanic_cleaned$SibSp~titanic_cleaned$Survived, ylab="the number of siblings/spouses aboard the Titanic",main="Survival vs the number of siblings/spouses aboard the Titanic", xlab="Survival", las=1, names=c("Not survive", "Survive"), col=c("red", "green"))
+
+# Survival vs the number of parents/children aboard the Titanic
+boxplot(titanic_cleaned$Parch~titanic_cleaned$Survived, ylab="the number of parents/children aboard the Titanic",main="Survival vs the number of parents/children aboard the Titanic", xlab="Survival", las=1, names=c("Not survive", "Survive"), col=c("red", "green"))
+
+4.2 Using Chi-Square Test to show trend between survival and categorical data including ticket class, gender and port of Embarkation. In addition, the boxplot is complimentary to see the trend of relation
+# survival vs Ticket class
+table(titanic_cleaned$Survived, titanic_cleaned$Pclass)                
+tabPCLASS = table(titanic_cleaned$Survived, titanic_cleaned$Pclass)
+barplot(tabPCLASS, beside = T, main="Survival vs Ticket class", ylab="Number of people", names=c("1st", "2nd", "3rd"), col = c("red", "green"), xlab = "Ticket class")+ legend("topleft", c("Not survive", "Survive"), fill = c("red", "green"))
+chisq.test(tabPCLASS, correct = T)   #dependent sig ;X-squared = 91.081, df = 2, p-value < 2.2e-16
+
+# survival vs Gender
+table(titanic_cleaned$Survived, titanic_cleaned$Sex)
+tabSEX = table(titanic_cleaned$Survived, titanic_cleaned$Sex)
+barplot(tabSEX, beside = T, main="Survival vs Gender", ylab="Number of people", col = c("red", "green"), xlab = "Gender")+ legend("topleft", c("Not survive", "Survive"), fill = c("red", "green"))
+chisq.test(tabSEX, correct = T)      #dependent sig ; X-squared = 202.87, df = 1, p-value < 2.2e-16
+
+
+# Survival vs Port of Embarkation
+table(titanic_cleaned$Survived, titanic_cleaned$Embarked)
+tabEMBARKED = table(titanic_cleaned$Survived, titanic_cleaned$Embarked)
+barplot(tabEMBARKED, beside = T, main="Survival vs Port of Embarkation", ylab="Number of people", col = c("red", "green"), xlab = "Port of Embarkation", names=c("Cherbourg", "Queenstown", "Southampton"))+ legend("topleft", c("Not survive", "Survive"), fill = c("red", "green"))
+chisq.test(tabEMBARKED, correct = T) #dependent sig; X-squared = 27.919, df = 2, p-value = 8.66e-07
+
+
+link : Chi-Square Test in R   https://data-flair.training/blogs/chi-square-test-in-r/

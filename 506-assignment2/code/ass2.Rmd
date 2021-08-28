@@ -14,7 +14,10 @@ y = 3
 ```{r}
 titanic <- read.csv(file = '../data/train.csv')
 
+install.packages("tidyverse")
+library(tidyverse)
 
+install.packages("ggplot2")
 ```
 
 
