@@ -1,0 +1,7 @@
+"0","titanic <- read.csv(file = '../data/train.csv')"
+"0",""
+"0","install.packages(""tidyverse"")"
+"2","Error: unexpected symbol in:
+""
+install.packages(""tidyverse""
+"
